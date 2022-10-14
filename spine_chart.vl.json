@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Condom use in Females and Males by Age Group",
+  "data": {
+    "url": "https://raw.githubusercontent.com/lshi0032/DataVisualisation/main/condomuse-age-gender-new.json"
+  },
+  "transform": [
+    {"calculate": "datum.Sex == 2 ? 'Females' : 'Males'", "as": "gender"},
+    {
+      "calculate": "datum.Sex == 2 ? -datum.Condom_use : datum.Condom_use",
+      "as": "condom_percent"
+    }
+  ],
+  "width": 400,
+  "height": 200,
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "y": {"field": "Age", "axis": null, "sort": "descending"},
+        "x": {
+          "aggregate": "average",
+          "field": "condom_percent",
+          "title": "Average use of condoms (percentage)",
+          "axis": {"format": "s"}
+        },
+        "color": {
+          "field": "gender",
+          "scale": {"range": ["#adf0e9", "#9685ed"]},
+          "legend": {"orient": "top", "title": null}
+        },
+        "tooltip": [
+          {"field": "gender", "type": "nominal", "title": "Gender"},
+          {"field": "Age_Range", "type": "nominal", "title": "Age Range"},
+          {
+            "field": "condom_percent",
+            "aggregate": "average",
+            "type": "quantitative",
+            "title": "Average use of condoms (percentage)"
+          }
+        ]
+      }
+    },
+    {
+      "encoding": {
+        "x": {"value": 440},
+        "y": {"field": "Age", "type": "quantitative", "axis": null}
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dy": 30,
+            "font": "monospace"
+          },
+          "encoding": {"text": {"field": "Age_Range", "type": "nominal"}}
+        }
+      ]
+    }
+  ],
+  "config": {"view": {"stroke": null}, "axis": {"grid": false}}
+}
